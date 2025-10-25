@@ -62,6 +62,10 @@ php artisan serve
 Then open your browser:
 http://127.0.0.1:8000
 
-#View API documentation
+---
+
+## API documentation
+
 Run : php artisan l5-swagger:generate
+
 Then open the documentation at : http://127.0.0.1:8000/api/documentation

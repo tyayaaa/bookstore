@@ -1,0 +1,418 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Bookstore API",
+        "description": "API documentation for Bookstore project",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8000",
+            "description": "Local server"
+        }
+    ],
+    "paths": {
+        "/api/authors/top": {
+            "get": {
+                "tags": [
+                    "Authors"
+                ],
+                "summary": "Get top authors",
+                "description": "Retrieve a ranked list of top authors based on popularity, average rating, or trending score.",
+                "operationId": "4d44841afe83b2bc38dbfc31a431a688",
+                "parameters": [
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sort mode: popularity, average, or trending",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "popularity",
+                                "average",
+                                "trending"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Number of top authors to return (default: 10)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Top authors retrieved successfully"
+                    },
+                    "400": {
+                        "description": "Invalid query parameters"
+                    }
+                }
+            }
+        },
+        "/api/authors": {
+            "get": {
+                "tags": [
+                    "Authors"
+                ],
+                "summary": "Get all authors",
+                "description": "Retrieve the full list of all authors in the system.",
+                "operationId": "460d2999389ba18463c4b5706456fb2b",
+                "responses": {
+                    "200": {
+                        "description": "List of authors retrieved successfully"
+                    }
+                }
+            }
+        },
+        "/api/book": {
+            "get": {
+                "tags": [
+                    "Books"
+                ],
+                "summary": "Get list of books (with optional filters)",
+                "description": "Retrieve books with optional filters like author, category, year, rating, and more. You can try any combination of parameters.",
+                "operationId": "10a8ac3792d996df188aa7aa6f71375c",
+                "parameters": [
+                    {
+                        "name": "author_id",
+                        "in": "query",
+                        "description": "Filter by author ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "categories",
+                        "in": "query",
+                        "description": "Filter by one or more category IDs (comma-separated)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "year_start",
+                        "in": "query",
+                        "description": "Filter by publication start year",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "year_end",
+                        "in": "query",
+                        "description": "Filter by publication end year",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Book availability status (available or rented)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "available",
+                                "rented"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "location_id",
+                        "in": "query",
+                        "description": "Filter by location ID (if applicable)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "rating_min",
+                        "in": "query",
+                        "description": "Minimum rating filter",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "rating_max",
+                        "in": "query",
+                        "description": "Maximum rating filter",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sort by rating, votes, alpha, or weighted",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "rating",
+                                "votes",
+                                "alpha",
+                                "weighted"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "order",
+                        "in": "query",
+                        "description": "Sort order (asc or desc)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Results per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of books retrieved successfully"
+                    },
+                    "400": {
+                        "description": "Invalid query parameter"
+                    }
+                }
+            }
+        },
+        "/api/auto-register": {
+            "post": {
+                "tags": [
+                    "Guest"
+                ],
+                "summary": "Register a new guest user",
+                "description": "Creates a temporary guest account with a random name and email. This can be used by users who don't want to register manually.",
+                "operationId": "abcdba5a46a1fa0638d1f35479c5a263",
+                "responses": {
+                    "200": {
+                        "description": "Guest user registered successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "user_id": {
+                                            "type": "integer",
+                                            "example": 45
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/rating": {
+            "post": {
+                "tags": [
+                    "Rating"
+                ],
+                "summary": "Submit a rating for a book",
+                "description": "Allows a user to rate a book (1–10) and leave an optional comment. A user can only rate a book once, and only one rating per 24 hours is allowed.",
+                "operationId": "ce7c9bf1d2a21ba8fba2ddd55f9209de",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "book_id",
+                                    "author_id",
+                                    "user_id",
+                                    "rating"
+                                ],
+                                "properties": {
+                                    "book_id": {
+                                        "description": "The ID of the book to rate",
+                                        "type": "integer"
+                                    },
+                                    "author_id": {
+                                        "description": "The ID of the author of the book",
+                                        "type": "integer"
+                                    },
+                                    "user_id": {
+                                        "description": "The ID of the user giving the rating",
+                                        "type": "integer"
+                                    },
+                                    "rating": {
+                                        "description": "The rating value (1–10)",
+                                        "type": "integer",
+                                        "maximum": 10,
+                                        "minimum": 1
+                                    },
+                                    "comment": {
+                                        "description": "Optional comment for the rating",
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Rating saved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Rating saved successfully."
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 123
+                                                },
+                                                "book_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "user_id": {
+                                                    "type": "integer",
+                                                    "example": 13
+                                                },
+                                                "rating": {
+                                                    "type": "integer",
+                                                    "example": 8
+                                                },
+                                                "comment": {
+                                                    "type": "string",
+                                                    "example": "Bagus banget!"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "example": "2025-10-25T09:00:00.000000Z"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "example": "2025-10-25T09:00:00.000000Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation or logical error (e.g. duplicate rating, too soon to rate again)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "You have given a rating today. You can add rating again after 23 hours."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "rating": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "You have given a rating today. You can add rating again after 23 hours."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "An error occurred while saving the rating."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Authors",
+            "description": "Endpoints related to authors and their rankings"
+        },
+        {
+            "name": "Rating",
+            "description": "Endpoints related to rating"
+        },
+        {
+            "name": "Books",
+            "description": "Books"
+        },
+        {
+            "name": "Guest",
+            "description": "Guest"
+        }
+    ]
+}

@@ -7,8 +7,118 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Resources\BookResource;
 
+/**
+ * @OA\Info(
+ *     title="Bookstore API",
+ *     version="1.0.0",
+ *     description="API documentation for Bookstore project"
+ * ),
+ * 
+ * @OA\Server(
+ *     url=L5_SWAGGER_CONST_HOST,
+ *     description="Local server"
+ * )
+ */
+
 class BookController extends Controller
 {
+    /**
+     * @OA\Get(
+     *     path="/api/book",
+     *     summary="Get list of books (with optional filters)",
+     *     tags={"Books"},
+     *     description="Retrieve books with optional filters like author, category, year, rating, and more. You can try any combination of parameters.",
+     * 
+     *     @OA\Parameter(
+     *         name="author_id",
+     *         in="query",
+     *         description="Filter by author ID",
+     *         required=false,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="categories",
+     *         in="query",
+     *         description="Filter by one or more category IDs (comma-separated)",
+     *         required=false,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="year_start",
+     *         in="query",
+     *         description="Filter by publication start year",
+     *         required=false,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="year_end",
+     *         in="query",
+     *         description="Filter by publication end year",
+     *         required=false,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="status",
+     *         in="query",
+     *         description="Book availability status (available or rented)",
+     *         required=false,
+     *         @OA\Schema(type="string", enum={"available", "rented"})
+     *     ),
+     *     @OA\Parameter(
+     *         name="location_id",
+     *         in="query",
+     *         description="Filter by location ID (if applicable)",
+     *         required=false,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="rating_min",
+     *         in="query",
+     *         description="Minimum rating filter",
+     *         required=false,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="rating_max",
+     *         in="query",
+     *         description="Maximum rating filter",
+     *         required=false,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort",
+     *         in="query",
+     *         description="Sort by rating, votes, alpha, or weighted",
+     *         required=false,
+     *         @OA\Schema(type="string", enum={"rating","votes","alpha","weighted"})
+     *     ),
+     *     @OA\Parameter(
+     *         name="order",
+     *         in="query",
+     *         description="Sort order (asc or desc)",
+     *         required=false,
+     *         @OA\Schema(type="string", enum={"asc","desc"})
+     *     ),
+     *     @OA\Parameter(
+     *         name="per_page",
+     *         in="query",
+     *         description="Results per page",
+     *         required=false,
+     *         @OA\Schema(type="integer")
+     *     ),
+     * 
+     *     @OA\Response(
+     *         response=200,
+     *         description="List of books retrieved successfully"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid query parameter"
+     *     )
+     * )
+     */
+
+
     public function index(Request $request)
     {
         $query = Book::query()
@@ -21,6 +131,10 @@ class BookController extends Controller
 
         if ($request->filled('author_id')) {
             $query->where('author_id', $request->author_id);
+        }
+
+        if ($request->filled('location_id')) {
+            $query->where('store_id', $request->location_id);
         }
 
         if ($request->filled('search')) {
@@ -40,13 +154,16 @@ class BookController extends Controller
             });
         }
 
-        if ($request->filled('availability')) {
-            if ($request->availability === 'available') {
+        if ($request->filled('status') || $request->filled('availability')) {
+            $status = $request->get('status', $request->get('availability'));
+
+            if ($status === 'available') {
                 $query->where('stock', '>', 0);
-            } elseif ($request->availability === 'rented') {
+            } elseif ($status === 'rented') {
                 $query->where('stock', '=', 0);
             }
         }
+
 
         if ($request->has(['rating_min', 'rating_max'])) {
             $ratingMin = $request->rating_min;

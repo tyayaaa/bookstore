@@ -8,8 +8,44 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\Author;
 
+/**
+ * @OA\Tag(
+ *     name="Authors",
+ *     description="Endpoints related to authors and their rankings"
+ * )
+ */
 class AuthorController extends Controller
 {
+    /**
+     * @OA\Get(
+     *     path="/api/authors/top",
+     *     summary="Get top authors",
+     *     description="Retrieve a ranked list of top authors based on popularity, average rating, or trending score.",
+     *     tags={"Authors"},
+     *     @OA\Parameter(
+     *         name="sort",
+     *         in="query",
+     *         description="Sort mode: popularity, average, or trending",
+     *         required=false,
+     *         @OA\Schema(type="string", enum={"popularity","average","trending"})
+     *     ),
+     *     @OA\Parameter(
+     *         name="limit",
+     *         in="query",
+     *         description="Number of top authors to return (default: 10)",
+     *         required=false,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Top authors retrieved successfully"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid query parameters"
+     *     )
+     * )
+     */
     public function index(Request $request)
     {
         $tab = $request->query('sort', 'popularity');
@@ -116,6 +152,19 @@ class AuthorController extends Controller
             'data' => $authors,
         ]);
     }
+
+    /**
+     * @OA\Get(
+     *     path="/api/authors",
+     *     summary="Get all authors",
+     *     description="Retrieve the full list of all authors in the system.",
+     *     tags={"Authors"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="List of authors retrieved successfully"
+     *     )
+     * )
+     */
 
     public function all()
     {

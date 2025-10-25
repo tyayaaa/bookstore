@@ -11,7 +11,7 @@ A simple Laravel-based API project for managing **Books**, **Authors**, and **Ra
 ✅ Book **Rating System** with validation rules  
 ✅ Auto guest registration using **LocalStorage**  
 ✅ JSON-based API responses  
-✅ Built with **Laravel 11**
+✅ Built with **Laravel 12**
 
 ---
 

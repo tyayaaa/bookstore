@@ -1,6 +1,0 @@
-1. php artian storage:link
-2. php artian migrate --seed
-3. php artisan serve
-
-otomatis generate randomuser
-user bisa ngasih rating lagi setelah 24 jam

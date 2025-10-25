@@ -44,17 +44,12 @@ cp .env.example .env
 
 # 4. Update .env file (edit manually)
 
-# DB_CONNECTION=mysql
-
-# DB_HOST=127.0.0.1
-
-# DB_PORT=3306
-
-# DB_DATABASE=bookstore_db
-
-# DB_USERNAME=root
-
-# DB_PASSWORD=
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=bookstore_db
+DB_USERNAME=root
+DB_PASSWORD=
 
 # 5. Run migration & seeder
 
